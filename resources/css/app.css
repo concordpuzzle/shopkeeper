@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+
+.btn-primary {
+    background-color: #b71540 !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background-color: #9c1238 !important;
+}
+
+/* Custom styles for login and registration pages */
+.bg-custom {
+    background-color: #0c2461;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+
+.logo-text {
+    font-family: 'Arvo', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #b71540;
+}
