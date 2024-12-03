@@ -59,7 +59,3 @@ Route::middleware([
     Route::resource('expenses', ExpenseController::class);
     Route::post('expense-categories', [ExpenseCategoryController::class, 'store'])->name('expense-categories.store');
 });
-
-Auth::routes([
-    'register' => false // This disables registration
-]);
