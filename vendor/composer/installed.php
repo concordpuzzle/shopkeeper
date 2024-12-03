@@ -487,15 +487,6 @@
             'reference' => 'ba4d51eb56de7711b3a37d63aa0643e99a339ae5',
             'dev_requirement' => false,
         ),
-        'laravel/ui' => array(
-            'pretty_version' => 'v4.6.0',
-            'version' => '4.6.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../laravel/ui',
-            'aliases' => array(),
-            'reference' => 'a34609b15ae0c0512a0cf47a21695a2729cb7f93',
-            'dev_requirement' => false,
-        ),
         'league/commonmark' => array(
             'pretty_version' => '2.5.3',
             'version' => '2.5.3.0',
@@ -847,8 +838,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '3.0.0',
+                0 => '3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache' => array(
