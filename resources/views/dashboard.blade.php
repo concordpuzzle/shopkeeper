@@ -168,9 +168,6 @@
             const expensesData = @json($expensesData['data']);
             const expensesLabels = @json($expensesData['labels']);
 
-            console.log('Expenses Data:', expensesData);
-            console.log('Expenses Labels:', expensesLabels);
-
             const expensesChart = new Chart(ctxExpenses, {
                 type: 'line',
                 data: {
