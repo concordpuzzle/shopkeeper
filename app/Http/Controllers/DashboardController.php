@@ -71,6 +71,8 @@ class DashboardController extends Controller
                 ->toArray()
         ];
 
+        dd($expensesData); // Check the output
+
         return view('dashboard', compact('salesData', 'profitData', 'expensesData', 'labels'));
     }
 

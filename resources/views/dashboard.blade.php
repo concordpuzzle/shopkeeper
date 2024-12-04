@@ -172,7 +172,7 @@
             console.log('Expenses Labels:', expensesLabels);
 
             const expensesChart = new Chart(ctxExpenses, {
-                type: 'line', // Match the combined chart type
+                type: 'line',
                 data: {
                     labels: expensesLabels,
                     datasets: [{
