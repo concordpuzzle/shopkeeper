@@ -165,13 +165,19 @@
 
             // Expenses Chart
             const ctxExpenses = document.getElementById('expensesChart').getContext('2d');
+            const expensesData = @json($expensesData['data']);
+            const expensesLabels = @json($expensesData['labels']);
+
+            console.log('Expenses Data:', expensesData);
+            console.log('Expenses Labels:', expensesLabels);
+
             const expensesChart = new Chart(ctxExpenses, {
                 type: 'line', // Match the combined chart type
                 data: {
-                    labels: @json($expensesData['labels']),
+                    labels: expensesLabels,
                     datasets: [{
                         label: 'Expenses',
-                        data: @json($expensesData['data']),
+                        data: expensesData,
                         borderColor: 'rgba(255, 99, 132, 1)',
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         borderWidth: 1,
