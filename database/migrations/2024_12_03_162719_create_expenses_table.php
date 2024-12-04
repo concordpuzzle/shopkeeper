@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
-            $table->id();
-            $table->date('date');
-            $table->foreignId('expense_category_id')->constrained('expense_categories');
-            $table->decimal('amount', 10, 2);
-            $table->string('scan_url')->nullable();
-            $table->timestamps();
-        });
+        // Check if the table already exists
+        if (!Schema::hasTable('expenses')) {
+            Schema::create('expenses', function (Blueprint $table) {
+                $table->id();
+                $table->date('date');
+                $table->foreignId('expense_category_id')->constrained('expense_categories');
+                $table->decimal('amount', 10, 2);
+                $table->string('scan_url')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
@@ -26,6 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Drop the table if it exists
         Schema::dropIfExists('expenses');
     }
 };
