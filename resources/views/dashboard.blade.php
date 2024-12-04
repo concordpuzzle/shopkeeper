@@ -169,16 +169,15 @@
             const expensesLabels = @json($expensesData['labels']);
 
             const expensesChart = new Chart(ctxExpenses, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: expensesLabels,
                     datasets: [{
-                        label: 'Expenses',
+                        label: 'Total Expenses',
                         data: expensesData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
                         borderColor: 'rgba(255, 99, 132, 1)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderWidth: 1,
-                        fill: true
+                        borderWidth: 1
                     }]
                 },
                 options: {

@@ -72,6 +72,8 @@ class DashboardController extends Controller
                 ->toArray()
         ];
 
+        dd($expensesData); // Check the output
+
         return view('dashboard', compact('salesData', 'profitData', 'expensesData', 'labels'));
     }
 
@@ -260,15 +262,16 @@ class DashboardController extends Controller
 
     public function dashboard()
     {
-        // Fetch expenses data grouped by date
-        $expensesData = Expense::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
-            ->groupBy('date')
-            ->orderBy('date')
+        // Fetch expenses data grouped by month for the last 6 months
+        $expensesData = Expense::select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), DB::raw('SUM(amount) as total'))
+            ->where('created_at', '>=', now()->subMonths(6)) // Get data for the last 6 months
+            ->groupBy('month')
+            ->orderBy('month')
             ->get();
 
         // Prepare data for the view
-        $expensesLabels = $expensesData->pluck('date')->map(function($date) {
-            return \Carbon\Carbon::parse($date)->format('Y-m-d'); // Format date if needed
+        $expensesLabels = $expensesData->pluck('month')->map(function($month) {
+            return \Carbon\Carbon::parse($month)->format('F Y'); // Format month for display
         })->toArray();
 
         $expensesValues = $expensesData->pluck('total')->toArray();
