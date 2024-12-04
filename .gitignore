@@ -1,0 +1,13 @@
+# Laravel environment file
+.env
+
+# Laravel specific files
+/vendor/
+/node_modules/
+/public/storage
+/storage/*.key
+/storage/*.log
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
