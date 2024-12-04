@@ -7,6 +7,7 @@ use App\Models\Product;
 use Automattic\WooCommerce\Client;
 use Carbon\Carbon;
 use App\Models\Expense;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -257,5 +258,28 @@ class DashboardController extends Controller
         }
 
         return $labels;
+    }
+
+    public function dashboard()
+    {
+        // Fetch expenses data grouped by date
+        $expensesData = Expense::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Prepare data for the view
+        $expensesLabels = $expensesData->pluck('date')->map(function($date) {
+            return \Carbon\Carbon::parse($date)->format('Y-m-d'); // Format date if needed
+        })->toArray();
+
+        $expensesValues = $expensesData->pluck('total')->toArray();
+
+        return view('dashboard', [
+            'expensesData' => [
+                'labels' => $expensesLabels,
+                'data' => $expensesValues,
+            ],
+        ]);
     }
 }
