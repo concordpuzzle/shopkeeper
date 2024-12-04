@@ -38,7 +38,7 @@
                 </div>
 
                 <!-- Totals Section -->
-                <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="grid grid-cols-3 gap-4 mb-6">
                     <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
                         <h4 class="text-sm font-medium text-gray-500">Total Sales</h4>
                         <p class="text-2xl font-bold text-gray-900">${{ number_format(array_sum($salesData['data'] ?? []), 2) }}</p>
@@ -47,11 +47,20 @@
                         <h4 class="text-sm font-medium text-gray-500">Total Profit</h4>
                         <p class="text-2xl font-bold text-gray-900">${{ number_format(array_sum($profitData['data'] ?? []), 2) }}</p>
                     </div>
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h4 class="text-sm font-medium text-gray-500">Total Expenses</h4>
+                        <p class="text-2xl font-bold text-gray-900">${{ number_format(array_sum($expensesData['data'] ?? []), 2) }}</p>
+                    </div>
                 </div>
 
-                <!-- Chart Container -->
-                <div class="relative" style="height: 400px;">
+                <!-- Combined Chart Container -->
+                <div class="relative" style="height: 400px; width: 100%;">
                     <canvas id="combinedChart"></canvas>
+                </div>
+
+                <!-- Expenses Chart Container -->
+                <div class="relative mt-8" style="height: 400px; width: 100%;">
+                    <canvas id="expensesChart"></canvas>
                 </div>
             </div>
         </div>
@@ -62,6 +71,7 @@
     <script src="https://cdn.jsdelivr.net/npm/regression@2.0.1/dist/regression.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Existing combined chart code
             const ctx = document.getElementById('combinedChart');
             const labels = @json($salesData['labels'] ?? []);
             const salesData = @json($salesData['data'] ?? []);
@@ -153,24 +163,38 @@
                 }
             });
 
-            // Toggle datasets
-            document.getElementById('toggleSales').addEventListener('change', function(e) {
-                chart.data.datasets[0].hidden = !e.target.checked;
-                chart.update();
-            });
-
-            document.getElementById('toggleProfit').addEventListener('change', function(e) {
-                chart.data.datasets[2].hidden = !e.target.checked;
-                chart.update();
-            });
-
-            // Toggle trendlines
-            document.getElementById('toggleTrendline').addEventListener('change', function(e) {
-                chart.data.datasets[1].hidden = !e.target.checked; // Sales trendline
-                chart.data.datasets[3].hidden = !e.target.checked; // Profit trendline
-                chart.update();
+            // Expenses Chart
+            const ctxExpenses = document.getElementById('expensesChart').getContext('2d');
+            const expensesChart = new Chart(ctxExpenses, {
+                type: 'line', // Match the combined chart type
+                data: {
+                    labels: @json($expensesData['labels']),
+                    datasets: [{
+                        label: 'Expenses',
+                        data: @json($expensesData['data']),
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
             });
         });
     </script>
     @endpush
 </x-app-layout>
+

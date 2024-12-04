@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Automattic\WooCommerce\Client;
 use Carbon\Carbon;
+use App\Models\Expense;
 
 class DashboardController extends Controller
 {
@@ -40,10 +41,37 @@ class DashboardController extends Controller
         // Calculate profit data
         $profitData = $this->calculateProfitData($salesData, $products);
 
-        return view('dashboard', [
-            'salesData' => $salesData,
-            'profitData' => $profitData
-        ]);
+        // Generate labels for the date range
+        $labels = $this->generateDateLabels($startDate, $endDate, $period);
+
+        // Define the groupByFormat based on the period
+        $groupByFormat = match($period) {
+            'year' => 'Y',
+            '6months' => 'Y-m',
+            'month' => 'Y-m',
+            'week' => 'Y-m-d',
+            default => 'Y-m-d',
+        };
+
+        // Fetch expenses data
+        $expenses = Expense::whereBetween('date', [$startDate, $endDate])
+            ->orderBy('date')
+            ->get();
+
+        $expensesData = [
+            'labels' => $labels,
+            'data' => $expenses->isEmpty() ? array_fill(0, count($labels), 0) : $expenses
+                ->groupBy(function($expense) use ($groupByFormat) {
+                    return $expense->date->format($groupByFormat);
+                })
+                ->map(function($group) {
+                    return $group->sum('amount');
+                })
+                ->values()
+                ->toArray()
+        ];
+
+        return view('dashboard', compact('salesData', 'profitData', 'expensesData', 'labels'));
     }
 
     private function getStartDate($period)
@@ -198,5 +226,34 @@ class DashboardController extends Controller
             ]);
             return collect([]);
         }
+    }
+
+    private function generateDateLabels($startDate, $endDate, $period)
+    {
+        $labels = [];
+        $currentDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+
+        while ($currentDate <= $endDate) {
+            switch ($period) {
+                case 'daily':
+                    $labels[] = $currentDate->format('Y-m-d');
+                    $currentDate->addDay();
+                    break;
+                case 'weekly':
+                    $labels[] = $currentDate->format('W');
+                    $currentDate->addWeek();
+                    break;
+                case 'monthly':
+                    $labels[] = $currentDate->format('M Y');
+                    $currentDate->addMonth();
+                    break;
+                default:
+                    $labels[] = $currentDate->format('Y-m-d');
+                    $currentDate->addDay();
+            }
+        }
+
+        return $labels;
     }
 }
