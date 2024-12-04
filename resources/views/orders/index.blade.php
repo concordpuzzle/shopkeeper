@@ -50,6 +50,27 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <!-- Ordered List of Tasks -->
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold">Tasks:</h3>
+                    <ol class="list-decimal list-inside mt-2">
+                        <li>Print Sublimation Sheet</li>
+                        <li>Print Sleeve Paper</li>
+                        <li>Print Poster</li>
+                        <li>Create and print shipping labels and branding labels, then place on mailers</li>
+                        <li>Cut the posters & sleeves and fit to the boxes</li>
+                        <li>Cut sublimation paper, tape to blanks</li>
+                        <li>Press</li>
+                        <li>Fill mailers and ship</li>
+                    </ol>
+                    <h4 class="mt-4 font-semibold">Addendum:</h4>
+                    <ol class="list-decimal list-inside mt-2">
+                        <li>Run inventory</li>
+                        <li>Add expenses</li>
+                        <li>Create puzzle images</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
